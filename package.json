@@ -1,0 +1,27 @@
+{
+  "name": "kicker-scraper",
+  "version": "1.0.0",
+  "description": "Scrape data from kicker.de",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest",
+    "tdd": "jest --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "engines": {
+    "npm": ">=8.11.1"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-jest": "^23.4.0",
+    "babel-preset-env": "^1.7.0",
+    "jest": "^23.4.1"
+  },
+  "jest": {
+    "testMatch": [
+      "**/?(*.)+(it|test).js"
+    ]
+  }
+}
