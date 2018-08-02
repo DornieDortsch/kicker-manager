@@ -1,3 +1,10 @@
 {
-    "presets": ["env"]
-  }
+ "presets": [
+    ["env", {
+      "targets": {
+        "node": "8.111.1"
+      },
+      "useBuiltIns": true
+    }]
+  ]
+}

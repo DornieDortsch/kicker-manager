@@ -4,7 +4,9 @@
   "description": "Scrape data from kicker.de",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "nodemon lib/index.js --exec babel-node",
+    "build": "rimraf dist && babel lib -d dist --ignore it.js,test.js",
+    "serve": "node dist/index.js",
     "test": "jest",
     "tdd": "jest --watch"
   },
@@ -15,14 +17,17 @@
   },
   "dependencies": {
     "cheerio": "^1.0.0-rc.2",
+    "dotenv": "^6.0.0",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
+    "babel-cli": "^6.26.0",
     "babel-jest": "^23.4.0",
     "babel-preset-env": "^1.7.0",
-    "jest": "^23.4.1"
+    "jest": "^23.4.1",
+    "nodemon": "^1.18.3",
+    "rimraf": "^2.6.2"
   },
   "jest": {
     "testMatch": [
