@@ -10,6 +10,7 @@ https://dev.to/aurelkurtula/introduction-to-web-scraping-with-nodejs-9h2
 https://github.com/request/request
 https://github.com/request/request-promise
 https://github.com/cheeriojs/cheerio
+https://github.com/jprichardson/node-fs-extra
 
 ## Node
 https://github.com/babel/example-node-server
