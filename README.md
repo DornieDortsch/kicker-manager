@@ -1,3 +1,12 @@
+# Config
+You have to create a *.env* file that contains the kicker.de user and password.
+
+```
+# .env
+KICKER_USERNAME=user
+KICKER_PWD=password
+```
+
 #Links
 
 ## Tutorials
