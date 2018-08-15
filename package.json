@@ -1,7 +1,7 @@
 {
-  "name": "kicker-scraper",
+  "name": "kicker-manager",
   "version": "1.0.0",
-  "description": "Scrape data from kicker.de",
+  "description": "Advanced kicker.de Manager.",
   "main": "index.js",
   "scripts": {
     "start": "nodemon lib/index.js --exec babel-node",
