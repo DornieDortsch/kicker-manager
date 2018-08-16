@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon lib/index.js --exec babel-node",
+    "shedule": "babel-node lib/sheduleTransfermarkt.js",
     "build": "rimraf dist && babel lib -d dist --ignore it.js,test.js",
     "serve": "node dist/index.js",
     "test": "jest",
@@ -19,6 +20,7 @@
     "cheerio": "^1.0.0-rc.2",
     "dotenv": "^6.0.0",
     "fs-extra": "^7.0.0",
+    "moment": "^2.22.2",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5"
   },
