@@ -19,7 +19,38 @@
   </form>
 
 <script>
+  var initReady = false
+  var $messages = $('#messages')
   var socket = io()
+
+  var createChange = change => {
+    return $('<li>').html(
+      new Date(change.time).toLocaleTimeString('de-DE') 
+      + ' ' 
+      + change.type 
+      + ' ' 
+      + change.player.name 
+      + ' ' 
+      + ' (' + change.player.offers + ')'
+      + ' ' 
+      + '<a target="_blank" href="http://manager.kicker.de/pro/Transfermarkt/transfergebot/manliga/2946/manben/3704795/spielerid/' + change.player.id + '/action/1#ctl00_PlaceHolderContent_ctl00_spieler_ProDaten">bieten</a>' 
+    )
+  }
+
+  var displayDelta = delta => {
+    delta.forEach(change => {
+      $messages.prepend(createChange(change))
+    })
+  }
+
+  var displayChanges = changes => {
+    $messages.empty()
+
+    changes.forEach(change => {
+      $messages.append(createChange(change))
+    })
+  }
+
 
   $('form').submit(() => {
 
@@ -30,7 +61,24 @@
     return false
   })
 
-  socket.on('chat message', msg => {
-    $('#messages').append($('<li>').text(msg))
+  // socket.on('chat message', msg => {
+  //   $('#messages').append($('<li>').text(msg))
+  // })
+
+  socket.on('tfm.start', data => {
+    var changes = JSON.parse(decodeURIComponent(data))
+    
+    console.log('tfm.start ' + new Date().toLocaleTimeString('de-DE') + ' ' + changes.length)
+
+    displayChanges(changes)
   })
+
+  socket.on('tfm.delta', data => {
+    var delta = JSON.parse(decodeURIComponent(data))
+    
+    console.log('tfm.delta ' + new Date().toLocaleTimeString('de-DE') + ' ' + delta.length)
+
+    displayDelta(delta)
+  })
+
 </script>
