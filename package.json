@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node lib/index.js",
-    "shedule": "babel-node lib/sheduleTransfermarkt.js",
+    "git": "babel-node lib/gitrepository.js",
     "watch": "nodemon lib/index.js --exec babel-node",
     "build": "rimraf dist && babel lib -d dist --ignore it.js,test.js",
     "serve": "node dist/index.js",
@@ -23,6 +23,7 @@
     "express": "^4.16.3",
     "fs-extra": "^7.0.0",
     "moment": "^2.22.2",
+    "octonode": "^0.9.3",
     "request": "^2.87.0",
     "request-promise-native": "^1.0.5",
     "socket.io": "^2.1.1"
