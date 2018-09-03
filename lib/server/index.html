@@ -4,24 +4,61 @@
     form { background: grey; padding: 10px; position: fixed; bottom: 0; width: 100%; }
     form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
     form button { width: 9%; background: rgb(130, 224, 255); border: none; padding: 10px; }
-    #messages { list-style-type: none; margin: 0; padding: 0; }
-    #messages li { padding: 5px 10px; }
-    #messages li:nth-child(odd) { background: #eee; }
+    ul { list-style-type: none; margin: 0; padding: 0; border-bottom: 4px solid black }
+    ul li { padding: 5px 10px; }
+    ul li:nth-child(odd) { background: #eee; }
+
+    #liga li { display: inline-block; }
 </style>
 
 <script src="https://code.jquery.com/jquery-1.11.1.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
+
+  <ul id="liga"></ul>
   
-  <ul id="messages"></ul>
+  <ul id="actions"></ul>
   
-  <form action="">
-    <input id="m" autocomplete="off" /><button>Send</button>
-  </form>
+  <!--
+    <form action="">
+      <input id="m" autocomplete="off" /><button>Send</button>
+    </form>
+  -->
 
 <script>
   var initReady = false
-  var $messages = $('#messages')
+  var $liga = $('#liga')
+  var $actions = $('#actions')
   var socket = io()
+
+  var displayState = state => {
+    createLiga(state.liga)
+  }
+
+  var createLiga = liga => {
+    liga.mitglieder.forEach(id => $liga.append(createMitglied(liga.mitgliederDetail[id])))
+  }
+  
+  var createMitglied = mitglied => {
+    return $('<li>').html(
+        mitglied.name
+        + ' '
+        + mitglied.budget
+    )
+  }
+
+  var displayDelta = delta => {
+    delta.forEach(change => {
+      $actions.prepend(createChange(change))
+    })
+  }
+
+  var displayChanges = changes => {
+    $actions.empty()
+
+    changes.forEach(change => {
+      $actions.append(createChange(change))
+    })
+  }
 
   var createChange = change => {
     return $('<li>').html(
@@ -37,29 +74,15 @@
     )
   }
 
-  var displayDelta = delta => {
-    delta.forEach(change => {
-      $messages.prepend(createChange(change))
-    })
-  }
 
-  var displayChanges = changes => {
-    $messages.empty()
+  // $('form').submit(() => {
 
-    changes.forEach(change => {
-      $messages.append(createChange(change))
-    })
-  }
-
-
-  $('form').submit(() => {
-
-    socket.emit('chat message', $('#m').val())
+  //   socket.emit('chat message', $('#m').val())
       
-    $('#m').val('')
+  //   $('#m').val('')
 
-    return false
-  })
+  //   return false
+  // })
 
   // socket.on('chat message', msg => {
   //   $('#messages').append($('<li>').text(msg))
@@ -80,5 +103,9 @@
 
     displayDelta(delta)
   })
+
+  fetch('/data')
+  .then(response => response.json())
+  .then(displayState);
 
 </script>
