@@ -15,8 +15,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.7.3/socket.io.min.js"></script>
 
   <ul id="liga"></ul>
-  
-  <ul id="actions"></ul>
+  <ul id="offers"></ul>
   
   <!--
     <form action="">
@@ -27,17 +26,21 @@
 <script>
   var initReady = false
   var $liga = $('#liga')
-  var $actions = $('#actions')
+  var $offers = $('#offers')
   var socket = io()
 
-  var displayState = state => {
-    createLiga(state.liga)
+  var displayData = data => {
+    $liga.empty()
+    $offers.empty()
+
+    createLiga(data.liga)
+    createOffers(data.transfermarkt.offers)
   }
 
   var createLiga = liga => {
     liga.mitglieder.forEach(id => $liga.append(createMitglied(liga.mitgliederDetail[id])))
   }
-  
+
   var createMitglied = mitglied => {
     return $('<li>').html(
         mitglied.name
@@ -46,21 +49,20 @@
     )
   }
 
-  var displayDelta = delta => {
-    delta.forEach(change => {
-      $actions.prepend(createChange(change))
+  var createOffers = offers => {
+    offers.dates.forEach(date => createActions(offers.actions[date]))
+  }
+
+  var createActions = (actions, prepend) => {
+    actions.forEach(action => {
+      if(prepend)
+        $offers.prepend(createAction(action))
+      else
+        $offers.append(createAction(action))
     })
   }
 
-  var displayChanges = changes => {
-    $actions.empty()
-
-    changes.forEach(change => {
-      $actions.append(createChange(change))
-    })
-  }
-
-  var createChange = change => {
+  var createAction = change => {
     return $('<li>').html(
       new Date(change.time).toLocaleTimeString('de-DE') 
       + ' ' 
@@ -74,38 +76,23 @@
     )
   }
 
+  socket.on('tfm.start', () => {
+    console.log(new Date().toLocaleTimeString('de-DE') + ' tfm.start fetch data')
 
-  // $('form').submit(() => {
-
-  //   socket.emit('chat message', $('#m').val())
-      
-  //   $('#m').val('')
-
-  //   return false
-  // })
-
-  // socket.on('chat message', msg => {
-  //   $('#messages').append($('<li>').text(msg))
-  // })
-
-  socket.on('tfm.start', data => {
-    var changes = JSON.parse(decodeURIComponent(data))
-    
-    console.log('tfm.start ' + new Date().toLocaleTimeString('de-DE') + ' ' + changes.length)
-
-    displayChanges(changes)
+    fetch('/data')
+      .then(response => response.json())
+      .then(displayData)
   })
 
-  socket.on('tfm.delta', data => {
-    var delta = JSON.parse(decodeURIComponent(data))
-    
-    console.log('tfm.delta ' + new Date().toLocaleTimeString('de-DE') + ' ' + delta.length)
+  socket.on('tfm.update', date => {
+    if(date) {
+      console.log(new Date().toLocaleTimeString('de-DE') + ' tfm.update fetch data')
 
-    displayDelta(delta)
+      fetch('/data/')
+        .then(response => response.json())
+        .then(data => createActions(data.transfermarkt.offers.actions[date], true))
+    } else {
+      console.log(new Date().toLocaleTimeString('de-DE') + ' tfm.update empty')
+    }
   })
-
-  fetch('/data')
-  .then(response => response.json())
-  .then(displayState);
-
 </script>
