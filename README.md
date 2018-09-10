@@ -5,7 +5,19 @@ You have to create a *.env* file that contains the kicker.de user and password.
 # .env
 KICKER_USERNAME=user
 KICKER_PWD=password
+GITHUB_TOKEN=token
+GITHUB_GIST=id
+SERVER_PORT=4040
+SHEDULE=10
+MODE=master
 ```
+
+# Master config
+
+/srv/www/kicker-manager/kicker-manager.log
+
+sudo systemctl start kicker-manager.service
+sudo systemctl stop kicker-manager.service
 
 #Links
 
